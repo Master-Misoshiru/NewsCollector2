@@ -53,6 +53,10 @@ feat: add RSS feed parser for BBC News
 
 ## Development Guidelines for AI Assistants
 
+### Language / 言語
+
+- **常に日本語で返答してください。** すべての応答、説明、コメントは日本語で行ってください。
+
 ### General Principles
 
 1. **Read before editing.** Always read existing files before modifying them.
