@@ -1,0 +1,38 @@
+name: News Collector
+
+on:
+  schedule:
+    # 毎日 0:00 / 6:00 / 12:00 / 18:00 UTC に実行（日本時間 9:00 / 15:00 / 21:00 / 3:00）
+    - cron: '0 0,6,12,18 * * *'
+  workflow_dispatch:  # 手動実行も可能
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # posted.json をコミットするために必要
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python をセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 依存パッケージをインストール
+        run: pip install -r requirements.txt
+
+      - name: ニュースを収集して Discord に投稿
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python src/main.py
+
+      - name: 投稿済みリストをコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/posted.json
+          git diff --staged --quiet || git commit -m "chore: 投稿済み記事インデックスを更新"
+          git push
