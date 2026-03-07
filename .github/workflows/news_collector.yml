@@ -26,7 +26,7 @@ jobs:
 
       - name: ニュースを収集して Discord に投稿
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_NEWS2 }}
         run: python src/main.py
 
       - name: 投稿済みリストをコミット
