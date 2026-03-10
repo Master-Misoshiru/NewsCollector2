@@ -6,6 +6,7 @@ from pathlib import Path
 
 from collectors.rss_collector import fetch_articles
 from notifiers.discord import post_article
+from summarizer.gemini_summarizer import summarize_in_japanese
 
 POSTED_FILE = Path(__file__).parent.parent / "data" / "posted.json"
 
@@ -37,6 +38,9 @@ def main() -> None:
     print(f"取得記事数: {len(articles)}  未投稿: {len(new_articles)}")
 
     for article in new_articles:
+        article["summary_ja"] = summarize_in_japanese(
+            article["title"], article.get("summary", "")
+        )
         success = post_article(webhook_url, article)
         if success:
             posted.add(article["url"])

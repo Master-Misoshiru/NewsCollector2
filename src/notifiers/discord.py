@@ -13,9 +13,9 @@ def _strip_html(text: str) -> str:
 
 
 def post_article(webhook_url: str, article: dict) -> bool:
-    summary = _strip_html(article.get("summary", ""))
-    if len(summary) > 200:
-        summary = summary[:197] + "..."
+    summary = article.get("summary_ja") or _strip_html(article.get("summary", ""))
+    if len(summary) > 300:
+        summary = summary[:297] + "..."
 
     payload = {
         "embeds": [
